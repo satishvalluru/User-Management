@@ -1,0 +1,12 @@
+{
+  "users": [
+    {
+      "name": "satish",
+      "sapId": "12345",
+      "mobile": "7776768868",
+      "email": "satishkumar.valluru@hcl.com",
+      "gender": "male",
+      "id": 1
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>day2-JS</title>
+        <style>
+            .h2-demo{
+                background-color: blue;
+                color: white;
+                font-size: 30px;
+            }
+        
+      
+            .h2-demo-hover{
+                background-color: yellow;
+            }
+
+            .h1-demo{
+                text-transform:  uppercase;
+            }
+        </style>
+    </head>
+    <body>
+     
+            <input type="text" name="name" id="name" placeholder="Enter Name"/><br>
+            <input type="number" name="sapId" id="sapId" placeholder="Enter SapId"/><br>
+            <input type="number" name="mobile" id="mobile" placeholder="Enter Mobile No."/><br>
+            <input type="email" email="email" id="email" placeholder="Enter User Email"/><br>
+            <input type="text" name="gender" id="gender" placeholder="Enter Gender"/><br>
+
+
+            <button onclick="submit(event)">Submit</button><br>
+            <br>
+            <button onclick="getData()">Load Data</button>
+            <button onclick="remove(event)">Remove</button>
+
+      
+    <!-- <h1 class="greeting">
+        <div>
+            <span>Hello Good Morning</span>
+        </div>
+    </h1>
+    <div class="greeting">This is division</div>
+    <button onclick="add()">Add</button>
+    <button onclick="remove()">Remove</button>
+
+    <h2 id="#demo">Please login</h2> -->
+    <script>
+
+        function submit() {
+            console.log(event.type);
+            var name = document.getElementById("name").value; 
+            var sapId = document.getElementById("sapId").value;
+            var mobile = document.getElementById("mobile").value;
+            var email = document.getElementById("email").value;
+            var gender = document.getElementById("gender").value;
+
+            var obj = {name : name, sapId : sapId, mobile : mobile, email : email, gender : gender};
+            console.log(obj);
+            var httpReq;
+            if(window.XMLHttpRequest) {
+                httpReq = new XMLHttpRequest();
+            }
+            else{
+                httpReq = new ActiveXObject("")
+            }
+            httpReq.onreadystatechange = function() {
+
+                if(this.readyState ===4 && this.status === 201){ 
+                    console.log(this.response);
+                }
+            }
+            httpReq.open('post', 'http://localhost:3000/users', true);
+            httpReq.setRequestHeader("Content-type","application/json");
+            httpReq.send(JSON.stringify(obj));
+        }
+
+        function getData() {
+            var httpReq;
+            if(window.XMLHttpRequest) {
+                httpReq = new XMLHttpRequest();
+            }
+            else{
+                httpReq = new ActiveXObject("")
+            }
+            httpReq.onreadystatechange = function() {
+
+                if(this.readyState ===4 && this.status === 200){
+                    console.log(this.response);
+                    createTable(this.response);
+                   
+                }
+            }
+            httpReq.open('get', 'http://localhost:3000/users', true);
+            httpReq.send();
+        }
+ 
+        function createTable(response){
+            var table = document.createElement('table');
+
+                    var tbody = document.createElement('tbody');
+                    var thead = document.createElement('thead');
+                    var headTr = document.createElement('tr');
+
+                    var headTd1 = document.createElement('td');
+                    var headTd1text = document.createTextNode("Name");
+                    headTd1.appendChild(headTd1text);
+
+                    var headTd2 = document.createElement('td');
+                    var headTd2text = document.createTextNode ("SapId");
+                    headTd2.appendChild(headTd2text);
+
+                    var headTd3 = document.createElement('td');
+                    var headTd3text = document.createTextNode ("Id");
+                    headTd3.appendChild(headTd3text);
+
+                    var headTd4 = document.createElement('td');
+                    var headTd4text = document.createTextNode ("Mobile");
+                    headTd4.appendChild(headTd4text);
+
+                    var headTd5 = document.createElement('td');
+                    var headTd5text = document.createTextNode ("Email");
+                    headTd5.appendChild(headTd5text);
+
+                    var headTd6 = document.createElement('td');
+                    var headTd6text = document.createTextNode ("Gender");
+                    headTd6.appendChild(headTd6text);
+
+                    headTr.appendChild(headTd3);
+                    headTr.appendChild(headTd1);
+                    headTr.appendChild(headTd2);
+                    headTr.appendChild(headTd4);
+                    headTr.appendChild(headTd5);
+                    headTr.appendChild(headTd6);
+
+                    thead.appendChild(headTr);
+
+                    var data = JSON.parse(response);
+                    var len = data.length;
+                    
+                    if(len > 0 ){
+                    for(var i=0; i<len;i++){
+                        //console.log(data[i].name,data[i].sapId)
+                        var tbodyTr = document.createElement('tr');
+
+                        var td1 = document.createElement('td');
+                        var td1Text = document.createTextNode(data[i].name);
+                        td1.appendChild(td1Text);
+
+                        var td2 = document.createElement('td');
+                        var td2Text = document.createTextNode(data[i].sapId);
+                        td2.appendChild(td2Text);
+
+                        var td3 = document.createElement('td');
+                        var td3Text = document.createTextNode(data[i].id);
+                        td3.appendChild(td3Text);
+
+                        var td4 = document.createElement('td');
+                        var td4Text = document.createTextNode(data[i].mobile);
+                        td4.appendChild(td4Text);
+
+                        var td5 = document.createElement('td');
+                        var td5Text = document.createTextNode(data[i].email);
+                        td5.appendChild(td5Text);
+
+                        var td6 = document.createElement('td');
+                        var td6Text = document.createTextNode(data[i].gender);
+                        td6.appendChild(td6Text);
+
+                        tbodyTr.appendChild(td3);
+                        tbodyTr.appendChild(td1);
+                        tbodyTr.appendChild(td2);
+                        tbodyTr.appendChild(td4);
+                        tbodyTr.appendChild(td5);
+                        tbodyTr.appendChild(td6);
+
+                        tbody.appendChild(tbodyTr); 
+                    }
+                    }
+                    else{
+                        var data = document.createElement("h4");
+                        var noData = document.createTextNode("No data available")
+                        data.appendChild(noData);
+                        tbody.appendChild(data);
+                    }
+                    
+                    table.appendChild(thead);
+                    table.appendChild(tbody);
+
+                    var body = document.getElementsByTagName('body')[0];
+                    body.appendChild(table)
+        }
+        function add(){
+            var heading2 = document.getElementById("#demo");
+            heading2.innerHTML = "<p>Welcome User</p>";
+            heading2.setAttribute('class', 'h2-demo h1-demo');
+            heading2.setAttribute('name', 'name-demo');
+
+
+        }
+        // function remove() {
+        //     console.log(event.type);
+        //     var name = document.getElementById("name").value; 
+        //     var sapId = document.getElementById("sapId").value;
+            
+        //     var obj = {sapId : sapId};
+        //     console.log(obj);
+        //     var httpReq;
+        //     if(window.XMLHttpRequest) {
+        //         httpReq = new XMLHttpRequest();
+        //     }
+        //     else{
+        //         httpReq = new ActiveXObject("")
+        //     }
+        //     httpReq.onreadystatechange = function() {
+
+        //         if(this.readyState ===4 && this.status === 202){ 
+        //             console.log(this.response);
+        //         }
+        //     }
+        //     httpReq.open('put', 'http://localhost:3000/users', true);
+        //     httpReq.setRequestHeader("Content-type","application/json");
+        //     httpReq.send(JSON.stringify(obj));
+        // }
+
+        // function submit(event) {
+        //     console.log(event.type);
+        //     var name = document.getElementById("name").value; 
+        //     var sapId = document.getElementById("sapId").value;
+
+        //     var obj = {name : name, sapId : sapId};
+        //     console.log(obj);
+        //     //event.preventDefault()
+        // }
+        </script>
+
+    </body>
+</html>
