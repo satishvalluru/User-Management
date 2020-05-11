@@ -100,6 +100,7 @@ function getData() {
     httpReq.onreadystatechange = function() {
 
         if(this.readyState ===4 && this.status === 200){
+            var data = JSON.parse(this.response);
             console.log(this.response);
             tablecreate(this.response);
            
@@ -139,9 +140,9 @@ function tablecreate(response){
     var headTd6 = document.createElement('td');
     var headTd6text = document.createTextNode ("Gender");
     headTd6.appendChild(headTd6text);
-    
+
     var headTd7 = document.createElement('td');
-    var headTd7text = document.createTextNode ("Delete");
+    var headTd7text = document.createTextNode ("Action");
     headTd7.appendChild(headTd7text);
 
     headTr.appendChild(headTd3);
@@ -151,6 +152,7 @@ function tablecreate(response){
     headTr.appendChild(headTd5);
     headTr.appendChild(headTd6);
     headTr.appendChild(headTd7);
+
 
     thead.appendChild(headTr);
 
@@ -184,16 +186,61 @@ function tablecreate(response){
         var td6 = document.createElement('td');
         var td6Text = document.createTextNode(data[i].gender);
         td6.appendChild(td6Text);
+
+        //delete
+        var td7 = document.createElement('td');
+        var deleteBtn = document.createElement("button");
+        var deleteBtnText = document.createTextNode("Delete");
+        deleteBtn.addEventListener('click', function(){
+            var data = this.parentElement.parentElement.cells;
+            console.log(this)
         
-        
-        var td7=document.createElement('td');
-        var a=document.createElement('a');
-        var link = document.createTextNode("Remove");
-        a.appendChild(link);
-        a.setAttribute('class', 'Remove');
-        a.setAttribute('href', 'javascript:remove('+data[i].id+')');
-        td7.appendChild(a);
-        
+            if(window.XMLHttpRequest) {
+        httpReq = new XMLHttpRequest();
+    }
+    else{
+        httpReq = new ActiveXObject("")
+    }
+    httpReq.onreadystatechange = function() {
+
+        if(this.readyState ===4 && this.status === 200){
+            var data = JSON.parse(this.response);
+            alert('Deleted Successfully');      
+            getData();
+        }
+    }
+    httpReq.open('delete', 'http://localhost:3000/users/' + data[0].innerHTML, true);
+    httpReq.setRequestHeader("Content-type","application/json");
+    httpReq.send();
+
+        })
+
+      
+        deleteBtn.appendChild(deleteBtnText);
+
+        //update
+        var updateBtn = document.createElement("button");
+        var updateBtnText = document.createTextNode("Update");
+        updateBtn.addEventListener('click', function(){
+            var data = this.parentElement.parentElement.cells;
+            var obj1 = {id: data[0].innerHTML, name: data[1].innerHTML, sapId: data[2].innerHTML, email: data[3].innerHTML, mobile: data[4].innerHTML, gender: data[5].innerHTML}
+            localStorage.setItem('users', JSON.stringify(obj1));
+            window.location.assign("update.html");
+            console.log(this)
+        })
+        updateBtn.appendChild(updateBtnText);
+
+        td7.appendChild(deleteBtn);
+        td7.appendChild(updateBtn);
+
+        // var td7=document.createElement('td');
+        // var a=document.createElement('a');
+        // var link = document.createTextNode("Remove");
+        // a.appendChild(link);
+        // a.setAttribute('class', 'Remove');
+        // a.setAttribute('href', 'javascript:remove('+data[i].id+')');
+        // td7.appendChild(a);   
+
         tbodyTr.appendChild(td3);
         tbodyTr.appendChild(td1);
         tbodyTr.appendChild(td2);
@@ -201,6 +248,8 @@ function tablecreate(response){
         tbodyTr.appendChild(td5);
         tbodyTr.appendChild(td6);
         tbodyTr.appendChild(td7);
+
+
 
         tbody.appendChild(tbodyTr); 
     }

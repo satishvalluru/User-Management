@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Update</title>
+
+    </head>
+    <body>
+        <button onclick="history.back()">Back</button>
+        <h1>Update User Information</h1>
+
+        <table>
+			<tr>
+			<td>User Name: </td>
+			<td><input type="text" name="name" id="name" required="required" placeholder="Enter Name"/></td>
+			</tr>
+			<tr>
+			<td>Sap Id: </td>
+			<td><input type="number" name="sapId" id="sapId" required="required" placeholder="Enter SapId"/></td>
+			</tr>
+			<tr>
+			<td>Mobile Number: </td>
+			<td><input type="number" name="mobile" id="mobile" required="required" placeholder="Enter Mobile No."/></td>
+			</tr>
+			<tr>
+			<td>Email Id: </td>
+			<td>
+			 <input type="email" name="email"  id="email" placeholder="Enter Email Id" pattern="[a-z0-9._%+-]+@hcl.com" required />
+			</td>
+			</tr>
+			<tr>
+			<td>gender: </td>
+			<td><input type="text" name="gender" id="gender" required="required" placeholder="Enter Gender"/></td>
+			</tr>
+			<tr>
+			<td><button onclick="update()" class="form-submit-button">Update</button> </td>
+			</tr>
+			</table>
+
+        <script>
+            var data = JSON.parse(localStorage.getItem('users'));
+            console.log(data);
+            document.getElementById("name").value = data.name;
+            document.getElementById("sapId").value = data.sapId;
+            document.getElementById("gender").value = data.gender;
+            document.getElementById("mobile").value = data.gender;
+            document.getElementById("email").value = data.gender;
+
+            function update() {
+
+                var name = document.getElementById("name").value;
+                var sapId = document.getElementById("sapId").value;
+                var gender = document.getElementById("gender").value;
+                var mobile = document.getElementById("mobile").value;
+                var email =   document.getElementById("email").value;
+
+                var obj = {name : name, sapId : sapId, mobile : mobile, email : email, gender : gender};
+
+                console.log(obj);
+                var httpReq;
+    if(window.XMLHttpRequest) {
+        httpReq = new XMLHttpRequest();
+    }
+    else{
+        httpReq = new ActiveXObject("")
+    }
+    httpReq.onreadystatechange = function() {
+
+        if(this.readyState ===4 && this.status === 201){ 
+        alert('Updated Successfully');      
+        history.back();  
+    }
+    }
+    httpReq.open('put', 'http://localhost:3000/users/' + data.id, true);
+    httpReq.setRequestHeader("Content-type","application/json");
+    httpReq.send(JSON.stringify(obj));
+            }
+        </script>
+    </body>
+</html>
