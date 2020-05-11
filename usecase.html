@@ -48,7 +48,6 @@
 			<tr>
 			<td><button onclick="submit(event)" class="form-submit-button">Submit</button> </td>
 			<td><button onclick="getData()" class="form-load-button" >Load Data</button> </td>
-			<td><button onclick="update(event)" class="form-remove-button" >Update</button></td>
 			</tr>
 			</table>
 
@@ -144,10 +143,6 @@ function tablecreate(response){
     var headTd7 = document.createElement('td');
     var headTd7text = document.createTextNode ("Delete");
     headTd7.appendChild(headTd7text);
-    
-    var headTd8 = document.createElement('td');
-    var headTd8text = document.createTextNode ("Update");
-    headTd8.appendChild(headTd8text);
 
     headTr.appendChild(headTd3);
     headTr.appendChild(headTd1);
@@ -156,7 +151,6 @@ function tablecreate(response){
     headTr.appendChild(headTd5);
     headTr.appendChild(headTd6);
     headTr.appendChild(headTd7);
-    headTr.appendChild(headTd8);
 
     thead.appendChild(headTr);
 
@@ -199,15 +193,6 @@ function tablecreate(response){
         a.setAttribute('class', 'Remove');
         a.setAttribute('href', 'javascript:remove('+data[i].id+')');
         td7.appendChild(a);
-       
-        
-        var td8=document.createElement('td');
-        var aa=document.createElement('a');
-        var updatelink = document.createTextNode("Update");
-        aa.appendChild(updatelink);
-        aa.setAttribute('class', 'Update');
-        aa.setAttribute('href', 'javascript:update('+data[i].id+')');
-        td8.appendChild(aa);
         
         tbodyTr.appendChild(td3);
         tbodyTr.appendChild(td1);
@@ -216,7 +201,6 @@ function tablecreate(response){
         tbodyTr.appendChild(td5);
         tbodyTr.appendChild(td6);
         tbodyTr.appendChild(td7);
-        tbodyTr.appendChild(td8);
 
         tbody.appendChild(tbodyTr); 
     }
