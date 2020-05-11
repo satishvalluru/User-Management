@@ -23,277 +23,263 @@
 
     <body>
         <table>
-            <tr><td>Name :</td><td><input type="text" name="name" id="name" placeholder="Enter Name"></tr>
-            <tr><td>Enter SapId :</td><td><input type="number" name="sapId" id="sapId" placeholder="Enter SapId"/></td></tr>
-            <tr><td>Enter Mobile Number :</td><td><input type="number" name="mobile" id="mobile" placeholder="Enter Mobile No."/></td></tr>
-            <tr><td>Enter Email : </td><td><input type="email" name="email" id="email" placeholder="Enter User Email"/></td></tr>
-            <tr><td>Enter Gender :</td><td><input type="gender" name="gender" id="gender" placeholder="Enter Gender"/></td></tr>
-        </table >
-           
+			<tr>
+			<td>User Name: </td>
+			<td><input type="text" name="name" id="name" required="required" placeholder="Enter Name"/></td>
+			</tr>
+			<tr>
+			<td>Sap Id: </td>
+			<td><input type="number" name="sapId" id="sapId" required="required" placeholder="Enter SapId"/></td>
+			</tr>
+			<tr>
+			<td>Mobile Number: </td>
+			<td><input type="number" name="mobile" id="mobile" required="required" placeholder="Enter Mobile No."/></td>
+			</tr>
+			<tr>
+			<td>Email Id: </td>
+			<td>
+			 <input type="email" name="email"  id="email" placeholder="Enter Email Id" pattern="[a-z0-9._%+-]+@hcl.com" required />
+			</td>
+			</tr>
+			<tr>
+			<td>gender: </td>
+			<td><input type="text" name="gender" id="gender" required="required" placeholder="Enter Gender"/></td>
+			</tr>
+			<tr>
+			<td><button onclick="submit(event)" class="form-submit-button">Submit</button> </td>
+			<td><button onclick="getData()" class="form-load-button" >Load Data</button> </td>
+			<td><button onclick="update(event)" class="form-remove-button" >Update</button></td>
+			</tr>
+			</table>
 
-
-            <button onclick="submit(event)">Submit</button>
-            <button onclick="getData()">Load Data</button>
-            <button onclick="remove(id)">Remove</button>
-            <button onclick="update(id)">Update</button>
-
-      
-    <!-- <h1 class="greeting">
-        <div>
-            <span>Hello Good Morning</span>
-        </div>
-    </h1>
-    <div class="greeting">This is division</div>
-    <button onclick="add()">Add</button>
-    <button onclick="remove()">Remove</button>
-
-    <h2 id="#demo">Please login</h2> -->
     <script>
 
-        function submit() {
-            console.log(event.type);
-            var name = document.getElementById("name").value; 
-            var sapId = document.getElementById("sapId").value;
-            var mobile = document.getElementById("mobile").value;
-            var email = document.getElementById("email").value;
-            var gender = document.getElementById("gender").value;
+function myFunction() {
+  var x = document.getElementById("nav");
+  if (x.className === "nav") {
+    x.className += " responsive";
+  } else {
+    x.className = "nav";
+  }
+}
 
-            var obj = {name : name, sapId : sapId, mobile : mobile, email : email, gender : gender};
-            console.log(obj);
-            var httpReq;
-            if(window.XMLHttpRequest) {
-                httpReq = new XMLHttpRequest();
-            }
-            else{
-                httpReq = new ActiveXObject("")
-            }
-            httpReq.onreadystatechange = function() {
+function submit() {
+    console.log(event.type);
+    var name = document.getElementById("name").value; 
+    var sapId = document.getElementById("sapId").value;
+    var mobile = document.getElementById("mobile").value;
+    var email = document.getElementById("email").value;
+    var gender = document.getElementById("gender").value;
 
-                if(this.readyState ===4 && this.status === 201){ 
-                    console.log(this.response);
-                }
-            }
-            httpReq.open('post', 'http://localhost:3000/users', true);
-            httpReq.setRequestHeader("Content-type","application/json");
-            httpReq.send(JSON.stringify(obj));
+    var obj = {name : name, sapId : sapId, mobile : mobile, email : email, gender : gender};
+    console.log(obj);
+    var httpReq;
+    if(window.XMLHttpRequest) {
+        httpReq = new XMLHttpRequest();
+    }
+    else{
+        httpReq = new ActiveXObject("")
+    }
+    httpReq.onreadystatechange = function() {
+
+        if(this.readyState ===4 && this.status === 201){ 
+            console.log(this.response);
         }
+    }
+    httpReq.open('post', 'http://localhost:3000/users', true);
+    httpReq.setRequestHeader("Content-type","application/json");
+    httpReq.send(JSON.stringify(obj));
+}
+function getData() {
+    var httpReq;
+    if(window.XMLHttpRequest) {
+        httpReq = new XMLHttpRequest();
+    }
+    else{
+        httpReq = new ActiveXObject("")
+    }
+    httpReq.onreadystatechange = function() {
 
-        function getData() {
-            var httpReq;
-            if(window.XMLHttpRequest) {
-                httpReq = new XMLHttpRequest();
-            }
-            else{
-                httpReq = new ActiveXObject("")
-            }
-            httpReq.onreadystatechange = function() {
-
-                if(this.readyState ===4 && this.status === 200){
-                    console.log(this.response);
-                    createTable(this.response);
-                   
-                }
-            }
-            httpReq.open('get', 'http://localhost:3000/users', true);
-            httpReq.send();
+        if(this.readyState ===4 && this.status === 200){
+            console.log(this.response);
+            tablecreate(this.response);
+           
         }
- 
-        function createTable(response){
-            var table = document.createElement('table');
+    }
+    httpReq.open('get', 'http://localhost:3000/users', true);
+    httpReq.send();
+}
 
-                    var tbody = document.createElement('tbody');
-                    var thead = document.createElement('thead');
-                    var headTr = document.createElement('tr');
+function tablecreate(response){
+	var table = document.createElement('table');
+	table.setAttribute("border", "1");
+    var tbody = document.createElement('tbody');
+    var thead = document.createElement('thead');
+    var headTr = document.createElement('tr');
 
-                    var headTd1 = document.createElement('td');
-                    var headTd1text = document.createTextNode("Name");
-                    headTd1.appendChild(headTd1text);
+    var headTd1 = document.createElement('td');
+    var headTd1text = document.createTextNode("Name");
+    headTd1.appendChild(headTd1text);
 
-                    var headTd2 = document.createElement('td');
-                    var headTd2text = document.createTextNode ("SapId");
-                    headTd2.appendChild(headTd2text);
+    var headTd2 = document.createElement('td');
+    var headTd2text = document.createTextNode ("SapId");
+    headTd2.appendChild(headTd2text);
 
-                    var headTd3 = document.createElement('td');
-                    var headTd3text = document.createTextNode ("Id");
-                    headTd3.appendChild(headTd3text);
+    var headTd3 = document.createElement('td');
+    var headTd3text = document.createTextNode ("Id");
+    headTd3.appendChild(headTd3text);
 
-                    var headTd4 = document.createElement('td');
-                    var headTd4text = document.createTextNode ("Mobile");
-                    headTd4.appendChild(headTd4text);
+    var headTd4 = document.createElement('td');
+    var headTd4text = document.createTextNode ("Mobile");
+    headTd4.appendChild(headTd4text);
 
-                    var headTd5 = document.createElement('td');
-                    var headTd5text = document.createTextNode ("Email");
-                    headTd5.appendChild(headTd5text);
+    var headTd5 = document.createElement('td');
+    var headTd5text = document.createTextNode ("Email");
+    headTd5.appendChild(headTd5text);
 
-                    var headTd6 = document.createElement('td');
-                    var headTd6text = document.createTextNode ("Gender");
-                    headTd6.appendChild(headTd6text);
-
-                    var headTd7 = document.createElement('td');
-                    var headTd7text = document.createTextNode ("Action-1");
-                    headTd7.appendChild(headTd7text);
-
-                    var headTd8 = document.createElement('td');
-                    var headTd8text = document.createTextNode ("Action-2");
-                    headTd8.appendChild(headTd8text);
-
-                    headTr.appendChild(headTd3);
-                    headTr.appendChild(headTd1);
-                    headTr.appendChild(headTd2);
-                    headTr.appendChild(headTd4);
-                    headTr.appendChild(headTd5);
-                    headTr.appendChild(headTd6);
-                    headTr.appendChild(headTd7);
-                    headTr.appendChild(headTd8);
-
-
-                    thead.appendChild(headTr);
-
-                    var data = JSON.parse(response);
-                    var len = data.length;
-                    
-                    if(len > 0 ){
-                    for(var i=0; i<len;i++){
-                        //console.log(data[i].name,data[i].sapId)
-                        var tbodyTr = document.createElement('tr');
-
-                        var td1 = document.createElement('td');
-                        var td1Text = document.createTextNode(data[i].name);
-                        td1.appendChild(td1Text);
-
-                        var td2 = document.createElement('td');
-                        var td2Text = document.createTextNode(data[i].sapId);
-                        td2.appendChild(td2Text);
-
-                        var td3 = document.createElement('td');
-                        var td3Text = document.createTextNode(data[i].id);
-                        td3.appendChild(td3Text);
-
-                        var td4 = document.createElement('td');
-                        var td4Text = document.createTextNode(data[i].mobile);
-                        td4.appendChild(td4Text);
-
-                        var td5 = document.createElement('td');
-                        var td5Text = document.createTextNode(data[i].email);
-                        td5.appendChild(td5Text);
-
-                        var td6 = document.createElement('td');
-                        var td6Text = document.createTextNode(data[i].gender);
-                        td6.appendChild(td6Text);
-
-                        tbodyTr.appendChild(td3);
-                        tbodyTr.appendChild(td1);
-                        tbodyTr.appendChild(td2);
-                        tbodyTr.appendChild(td4);
-                        tbodyTr.appendChild(td5);
-                        tbodyTr.appendChild(td6);
-
-                        tbody.appendChild(tbodyTr); 
-                    }
-                    }
-                    else{
-                        var data = document.createElement("h4");
-                        var noData = document.createTextNode("No data available")
-                        data.appendChild(noData);
-                        tbody.appendChild(data);
-                    }
-                    
-                    table.appendChild(thead);
-                    table.appendChild(tbody);
-
-                    var body = document.getElementsByTagName('body')[0];
-                    body.appendChild(table)
-        }
-        function add(){
-            var heading2 = document.getElementById("#demo");
-            heading2.innerHTML = "<p>Welcome User</p>";
-            heading2.setAttribute('class', 'h2-demo h1-demo');
-            heading2.setAttribute('name', 'name-demo');
-
-
-        }
-        // function remove() {
-        //     console.log(event.type);
-            
-        //     var gender = document.getElementById("gender").value;
-
-        //     var obj = {gender : gender};
-        //     console.log(obj);
-        //     var httpReq;
-        //     if(window.XMLHttpRequest) {
-        //         httpReq = new XMLHttpRequest();
-        //     }
-        //     else{
-        //         httpReq = new ActiveXObject("")
-        //     }
-        //     httpReq.onreadystatechange = function() {
-
-        //         if(this.readyState ===4 && this.status === 202){ 
-        //             console.log(this.response);
-        //         }
-        //     }
-        //     httpReq.open('delete', 'http://localhost:3000/users', true);
-        //     httpReq.setRequestHeader("Content-type","application/json");
-        //     httpReq.send(JSON.stringify(obj));
-        // }
-
-
-       function remove(id) {
-            alert("id:" + id);
-            console.log(id);
-
-            var url = "http://localhost:3000/users/" + id;
-            var xhar = new XMLHttpRequest();
-            xhar.open("DELETE", url, true);
-            xhar.onload = function() {
-                var users = JSON.parse(xhar.responseText);
-                if(xhar.readyState === 4 && xhar.status === 200){
-                    console.table(users);
-                }
-                else{
-                    console.error(users);
-                }
-            }
-            xhar.send(null);
-        }
-
-        function update(id) {
+    var headTd6 = document.createElement('td');
+    var headTd6text = document.createTextNode ("Gender");
+    headTd6.appendChild(headTd6text);
     
-            alert("id:" + id);
-            console.log(id);
+    var headTd7 = document.createElement('td');
+    var headTd7text = document.createTextNode ("Delete");
+    headTd7.appendChild(headTd7text);
+    
+    var headTd8 = document.createElement('td');
+    var headTd8text = document.createTextNode ("Update");
+    headTd8.appendChild(headTd8text);
 
-            var url = "http://localhost:3000/users/" + id;
+    headTr.appendChild(headTd3);
+    headTr.appendChild(headTd1);
+    headTr.appendChild(headTd2);
+    headTr.appendChild(headTd4);
+    headTr.appendChild(headTd5);
+    headTr.appendChild(headTd6);
+    headTr.appendChild(headTd7);
+    headTr.appendChild(headTd8);
 
-            var data = {};
-            data.name = "king";
-            data.email = "king@gmail.com";
-            var json = JSON.stringify(data);
+    thead.appendChild(headTr);
 
-            var xhar = new XMLHttpRequest();
-            xhar.open("PUT", url, true);
-            xhar.setRequestHeader("Content-type","application/json");
-            xhar.onload = function() {
-                var users = JSON.parse(xhar.responseText);
-                if(xhar.readyState === 4 && xhar.status === 200){
-                    console.table(users);
-                }
-                else{
-                    console.error(users);
-                }
-            }
-            xhar.send(json);
+    var data = JSON.parse(response);
+    var len = data.length;
+    
+    if(len > 0 ){
+    for(var i=0; i<len;i++){
+        var tbodyTr = document.createElement('tr');
+
+        var td1 = document.createElement('td');
+        var td1Text = document.createTextNode(data[i].name);
+        td1.appendChild(td1Text);
+
+        var td2 = document.createElement('td');
+        var td2Text = document.createTextNode(data[i].sapId);
+        td2.appendChild(td2Text);
+
+        var td3 = document.createElement('td');
+        var td3Text = document.createTextNode(data[i].id);
+        td3.appendChild(td3Text);
+
+        var td4 = document.createElement('td');
+        var td4Text = document.createTextNode(data[i].mobile);
+        td4.appendChild(td4Text);
+
+        var td5 = document.createElement('td');
+        var td5Text = document.createTextNode(data[i].email);
+        td5.appendChild(td5Text);
+
+        var td6 = document.createElement('td');
+        var td6Text = document.createTextNode(data[i].gender);
+        td6.appendChild(td6Text);
         
-        }
+        
+        var td7=document.createElement('td');
+        var a=document.createElement('a');
+        var link = document.createTextNode("Remove");
+        a.appendChild(link);
+        a.setAttribute('class', 'Remove');
+        a.setAttribute('href', 'javascript:remove('+data[i].id+')');
+        td7.appendChild(a);
+       
+        
+        var td8=document.createElement('td');
+        var aa=document.createElement('a');
+        var updatelink = document.createTextNode("Update");
+        aa.appendChild(updatelink);
+        aa.setAttribute('class', 'Update');
+        aa.setAttribute('href', 'javascript:update('+data[i].id+')');
+        td8.appendChild(aa);
+        
+        tbodyTr.appendChild(td3);
+        tbodyTr.appendChild(td1);
+        tbodyTr.appendChild(td2);
+        tbodyTr.appendChild(td4);
+        tbodyTr.appendChild(td5);
+        tbodyTr.appendChild(td6);
+        tbodyTr.appendChild(td7);
+        tbodyTr.appendChild(td8);
 
-        // function submit(event) {
-        //     console.log(event.type);
-        //     var name = document.getElementById("name").value; 
-        //     var sapId = document.getElementById("sapId").value;
+        tbody.appendChild(tbodyTr); 
+    }
+    }
+    else{
+        var data = document.createElement("h4");
+        var noData = document.createTextNode("No data Found")
+        data.appendChild(noData);
+        tbody.appendChild(data);
+    }
+    
+    table.appendChild(thead);
+    table.appendChild(tbody);
 
-        //     var obj = {name : name, sapId : sapId};
-        //     console.log(obj);
-        //     //event.preventDefault()
-        // }
+    var body = document.getElementsByTagName('body')[0];
+    body.appendChild(table)
+	
+}
+
+ function remove(id) {
+    console.log(id);
+  
+    	var url = "http://localhost:3000/users/"+id;
+    	var xhr = new XMLHttpRequest();
+    	xhr.open("DELETE", url, true);
+    	xhr.onload = function () {
+    		var users = JSON.parse(xhr.responseText);
+    		if (xhr.readyState == 4 && xhr.status == "200") {
+    			console.table(users);
+    		} else {
+    			console.error(users);
+    		}
+    	}
+    	xhr.send(null);
+}
+ 
+ function update(id) {
+		console.log("id: "+id);
+		var url = "http://localhost:3000/users/"+id;
+		
+		var data = {};
+		data.name = "king";
+		data.email  = "king@xyz.com";
+		data.sapId="234567";
+		data.gender="female";
+		data.mobile="8888888888";
+		var json = JSON.stringify(data);
+
+		var xhr = new XMLHttpRequest();
+		xhr.open("PUT", url, true);
+		xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+		xhr.onload = function () {
+			var users = JSON.parse(xhr.responseText);
+			if (xhr.readyState == 4 && xhr.status == "200") {
+				console.table(users);
+			} else {
+				console.error(users);
+			}
+		}
+		xhr.send(json);
+	     
+	}
+
         </script>
 
     </body>
